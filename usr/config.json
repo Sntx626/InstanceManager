@@ -1,14 +1,14 @@
 {
   "command": [
-    "c:\\\\users\\\\synta\\\\desktop\\\\run.bat"
+    ""
   ],
   "update command": [
-    "c:\\\\users\\\\synta\\\\desktop\\\\update.bat"
+    ""
   ],
   "directories to backup": [
-    "c:\\users\\synta\\desktop\\test2"
+    ""
   ],
-  "latestBackup": "c:\\users\\synta\\google drive\\dokumente\\programming\\python\\tools\\instancemanager\\usr\\backups\\06-dec-2020_19h21m08s",
+  "latestBackup": "",
   "autoRestart": false,
   "autoUpdate": false,
   "scheduledUpdate": false,

@@ -63,7 +63,7 @@ def updateConsole(self):
 # external threads
 
 def start(self):
-    self.Instance = subprocess.Popen(json.load(open('usr/config.json'))['command'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    self.Instance = subprocess.Popen(json.load(open('usr/config.json'))['command'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, creationflags=subprocess.CREATE_NO_WINDOW)
     watcherThread = threading.Thread(target=instanceWatcher, args=[self])
     watcherThread.start()
     consoleThread = threading.Thread(target=updateConsole, args=[self])

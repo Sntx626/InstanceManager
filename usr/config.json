@@ -5,14 +5,12 @@
   "update command": [
     ""
   ],
-  "directories to backup": [
-    ""
-  ],
+  "directories to backup": [],
   "latestBackup": "",
   "autoRestart": false,
   "autoUpdate": false,
   "scheduledUpdate": false,
   "scheduledUpdateTimeHours": "4",
   "scheduledUpdateTimeMinutes": "30",
-  "lastBackupOk": true
+  "lastBackupOk": false
 }

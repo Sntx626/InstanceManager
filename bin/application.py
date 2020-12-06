@@ -78,14 +78,14 @@ class Application(tk.Frame):
         if dir == "":
             return
         config = json.load(open("usr/config.json"))
-        config["command"] = [f"{os.path.normcase(dir)}"]
+        config["command"] = [f"{os.path.normpath(dir)}"]
         json.dump(config, open("usr/config.json", "w"), indent=2)
         self.configLabelEntryVar.set(f"{json.load(open('usr/config.json'))['command']}")
 
     def setCommand(self, *args):
         list = self.configLabelEntryVar.get().strip('][').split(', ')
         for i in range(len(list)):
-            list[i] = list[i].strip("'")
+            list[i] = os.path.normpath(list[i].strip("'"))
         methods.updateConfigVar("command", list)
     
     def getUpdateCommand(self):
@@ -93,20 +93,20 @@ class Application(tk.Frame):
         if dir == "":
             return
         config = json.load(open("usr/config.json"))
-        config["update command"] = [f"{os.path.normcase(dir)}"]
+        config["update command"] = [f"{os.path.normpath(dir)}"]
         json.dump(config, open("usr/config.json", "w"), indent=2)
         self.updateLabelEntryVar.set(f"{json.load(open('usr/config.json'))['update command']}")
 
     def removeBackupFolder(self, label, dir):
         config = json.load(open("usr/config.json"))
-        config["directories to backup"].remove(os.path.normcase(dir))
+        config["directories to backup"].remove(os.path.normpath(dir))
         json.dump(config, open("usr/config.json", "w"), indent=2)
         label.destroy()
 
     def setUpdateCommand(self, *args):
         list = self.updateLabelEntryVar.get().strip('][').split(', ')
         for i in range(len(list)):
-            list[i] = list[i].strip("'")
+            list[i] = os.path.normpath(list[i].strip("'"))
         methods.updateConfigVar("update command", list)
     
     def addFolderToBackup(self):
@@ -114,15 +114,15 @@ class Application(tk.Frame):
         if dir == "":
             return
         config = json.load(open("usr/config.json"))
-        config["directories to backup"].append(os.path.normcase(dir))
+        config["directories to backup"].append(os.path.normpath(dir))
         json.dump(config, open("usr/config.json", "w"), indent=2)
-        backupLabel = tk.Label(self.configBackupLabelFrame, text=f"{os.path.normcase(dir)}")
+        backupLabel = tk.Label(self.configBackupLabelFrame, text=f"{os.path.normpath(dir)}")
         backupLabel.pack(fill=tk.X)
         backupLabelButtonRemove = tk.Button(backupLabel, text="Remove this dir", command= lambda: self.removeBackupFolder(backupLabel, dir))
         backupLabelButtonRemove.pack(side=tk.RIGHT)
     
     def loadBackupFolderLabel(self, dir):
-        backupLabel = tk.Label(self.configBackupLabelFrame, text=f"{os.path.normcase(dir)}")
+        backupLabel = tk.Label(self.configBackupLabelFrame, text=f"{os.path.normpath(dir)}")
         backupLabel.pack(fill=tk.X)
         backupLabelButtonRemove = tk.Button(backupLabel, text="Remove this dir", command= lambda: self.removeBackupFolder(backupLabel, dir))
         backupLabelButtonRemove.pack(side=tk.RIGHT)
@@ -184,7 +184,7 @@ class Application(tk.Frame):
         
         backupDirs = json.load(open("usr/config.json"))["directories to backup"]
         for dir in backupDirs:
-            self.loadBackupFolderLabel(os.path.normcase(dir))
+            self.loadBackupFolderLabel(os.path.normpath(dir))
 
         executeLabelFrame = tk.LabelFrame(mainWindowFrame, text = "Execute")
         executeLabelFrame.pack(fill=tk.X, expand=True)
@@ -223,13 +223,13 @@ class Application(tk.Frame):
         self.executeCheckbuttonScheduledUpdate = tk.Checkbutton(executeUpdateLabelTop, text ="Activate Scheduled Update?", variable=self.scheduledUpdate, onvalue=True, offvalue=False, command=lambda: methods.updateConfigVar("scheduledUpdate", self.scheduledUpdate.get()))
         self.executeCheckbuttonScheduledUpdate.pack(side=tk.LEFT)
 
-        executeUpdateButtonBackup = tk.Button(executeUpdateLabelTop, text="Load Backup", command=methods.loadBackupFolders)
+        executeUpdateButtonBackup = tk.Button(executeUpdateLabelTop, text="Load Backup", command=lambda:methods.loadBackupFolders(self))
         executeUpdateButtonBackup.pack(side=tk.RIGHT)
 
-        executeUpdateButtonBackup = tk.Button(executeUpdateLabelTop, text="Run Update Command", command=methods.performUpdate)
+        executeUpdateButtonBackup = tk.Button(executeUpdateLabelTop, text="Run Update Command", command=lambda:methods.performUpdate(self))
         executeUpdateButtonBackup.pack(side=tk.RIGHT)
 
-        executeUpdateButtonBackup = tk.Button(executeUpdateLabelTop, text="Backup", command=methods.backupFolders)
+        executeUpdateButtonBackup = tk.Button(executeUpdateLabelTop, text="Backup", command=lambda:methods.backupFolders(self))
         executeUpdateButtonBackup.pack(side=tk.RIGHT)
 
         executeUpdateLabelBottom = tk.Label(executeUpdateLabelFrame)

@@ -65,11 +65,16 @@ def loadBackupFolders(self):
     self.consoleText.insert(tk.END, f"[{datetime.datetime.now()}]: Restoring files from Backup...\n")
     self.consoleText.see(tk.END)
     config = json.load(open('usr/config.json'))
-    metadata = json.load(open(f"{os.path.join(config['latestBackup'], 'metadata.json')}"))
-    for folder in metadata:
-        shutil.copytree(os.path.join(config['latestBackup'], folder), os.path.normcase(metadata[folder]), dirs_exist_ok=True)
-    self.consoleText.insert(tk.END, f"[{datetime.datetime.now()}]: Restored all data from Backup.!\n")
-    self.consoleText.see(tk.END)
+    if not config["lastBackupOk"]:
+        self.updateStatus("red")
+        self.consoleText.insert(tk.END, f"[{datetime.datetime.now()}]: Could not update. Reason: The last Backup couldnot be confirmed!\n")
+        self.consoleText.see(tk.END)
+    else:
+        metadata = json.load(open(f"{os.path.join(config['latestBackup'], 'metadata.json')}"))
+        for folder in metadata:
+            shutil.copytree(os.path.join(config['latestBackup'], folder), os.path.normcase(metadata[folder]), dirs_exist_ok=True)
+        self.consoleText.insert(tk.END, f"[{datetime.datetime.now()}]: Restored all data from Backup.!\n")
+        self.consoleText.see(tk.END)
 
 def update(self):
     backupFolders(self)

@@ -1,16 +1,20 @@
 {
   "command": [
-    ""
+    "python",
+    "C:\\Users\\synta\\Desktop\\run.py"
   ],
   "update command": [
-    ""
+    "C:\\Users\\synta\\Desktop\\update.bat"
   ],
-  "directories to backup": [],
-  "latestBackup": "",
+  "directories to backup": [
+    "C:\\Users\\synta\\Desktop\\Test1",
+    "C:\\Users\\synta\\Desktop\\Test2"
+  ],
+  "latestBackup": "C:\\Users\\synta\\Google Drive\\Dokumente\\Programming\\Python\\Tools\\InstanceManager\\usr\\backups\\06-Dec-2020_23h57m16s",
   "autoRestart": false,
-  "autoUpdate": false,
+  "autoUpdate": true,
   "scheduledUpdate": false,
   "scheduledUpdateTimeHours": "4",
   "scheduledUpdateTimeMinutes": "30",
-  "lastBackupOk": false
+  "lastBackupOk": true
 }

@@ -23,17 +23,17 @@ def backupFolders(self):
         os.mkdir(backupFolderPath)
         metadata = {}
         for folder in config["directories to backup"]:
-            metadata[str(os.path.basename(folder))] = os.path.normcase(folder)
-            shutil.copytree(os.path.normcase(folder), os.path.join(backupFolderPath, str(os.path.basename(folder))))
+            metadata[str(os.path.basename(folder))] = os.path.normpath(folder)
+            shutil.copytree(os.path.normpath(folder), os.path.join(backupFolderPath, str(os.path.basename(folder))))
         config["lastBackupOk"] = True
-        config["latestBackup"] = os.path.normcase(backupFolderPath)
+        config["latestBackup"] = os.path.normpath(backupFolderPath)
         json.dump(config, open("usr/config.json", "w"), indent=2)
         json.dump(metadata, open(f"{os.path.join(backupFolderPath, 'metadata.json')}", "w"), indent=2)
         self.consoleText.insert(tk.END, f"[{datetime.datetime.now()}]: Backed up folders.\n")
         self.consoleText.see(tk.END)
-    except:
+    except Exception as e:
         self.updateStatus("red")
-        self.consoleText.insert(tk.END, f"[{datetime.datetime.now()}]: There was an error backing up your folders.\n")
+        self.consoleText.insert(tk.END, f"[{datetime.datetime.now()}]: There was an error backing up your folders.\n{e}\n")
         self.consoleText.see(tk.END)
         config["lastBackupOk"] = False
         json.dump(config, open("usr/config.json", "w"), indent=2)
@@ -53,7 +53,7 @@ def performUpdate(self, join=False):
         except:
             pass
         self.bypassRestart = True
-        self.Instance = subprocess.Popen(json.load(open('usr/config.json'))['update command'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        self.Instance = subprocess.Popen(json.load(open('usr/config.json'))['update command'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, creationflags=subprocess.CREATE_NO_WINDOW)
         watcherThread = threading.Thread(target=threads.instanceWatcher, args=[self])
         watcherThread.start()
         consoleThread = threading.Thread(target=threads.updateConsole, args=[self])
@@ -72,7 +72,7 @@ def loadBackupFolders(self):
     else:
         metadata = json.load(open(f"{os.path.join(config['latestBackup'], 'metadata.json')}"))
         for folder in metadata:
-            shutil.copytree(os.path.join(config['latestBackup'], folder), os.path.normcase(metadata[folder]), dirs_exist_ok=True)
+            shutil.copytree(os.path.join(config['latestBackup'], folder), os.path.normpath(metadata[folder]), dirs_exist_ok=True)
         self.consoleText.insert(tk.END, f"[{datetime.datetime.now()}]: Restored all data from Backup.!\n")
         self.consoleText.see(tk.END)
 
